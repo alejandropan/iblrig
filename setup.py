@@ -5,7 +5,7 @@ with open("README.md", 'r') as f:
 
 setup(
     name='iblrig',
-    version='3.7.0',
+    version='3.7.2',
     description='IBL rig code',
     license="MIT",
     long_description=long_description,

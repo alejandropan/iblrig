@@ -10,7 +10,7 @@ import subprocess
 from pathlib import Path
 import json
 
-import init_logging  # noqa
+import ibltasks.init_logging  # noqa
 from ibllib.io import raw_data_loaders as raw
 from ibllib.graphic import strinput
 
@@ -472,7 +472,7 @@ class SessionPathCreator(object):
         ##########################################
             NOT FOUND: IBLRIG_VERSION_TAG
         ##########################################
-        You appear to be on an uncommitted version
+        You appear to be on an untagged version
         of iblrig. Please run iblrig/update.py to
         check which is the latest version.
         ##########################################"""

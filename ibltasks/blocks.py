@@ -3,7 +3,7 @@
 # @Date: Friday, February 8th 2019, 11:39:30 am
 # @Last Modified by: Niccolò Bonacchi
 # @Last Modified time: 8-02-2019 11:39:33.3333
-import misc
+import ibltasks.misc as misc
 import numpy as np
 
 

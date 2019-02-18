@@ -14,7 +14,7 @@ import logging
 
 sys.path.append(str(Path(__file__).parent.parent))  # noqa
 sys.path.append(str(Path(__file__).parent.parent.parent.parent))  # noqa
-from path_helper import SessionPathCreator
+from ibltasks.path_helper import SessionPathCreator
 logger = logging.getLogger('iblrig')
 
 

@@ -8,17 +8,19 @@ from pybpod_rotaryencoder_module.module import RotaryEncoder
 import matplotlib.pyplot as plt
 import logging
 
-from session_params import SessionParamHandler
-from trial_params import TrialParamHandler
-import task_settings
-import user_settings
+from ibltasks._iblrig_tasks_trainingChoiceWorld.session_params import (
+    SessionParamHandler)
+from ibltasks._iblrig_tasks_trainingChoiceWorld.trial_params import (
+    TrialParamHandler)
+import ibltasks._iblrig_tasks_trainingChoiceWorld.task_settings as ts
+import user_settings as us
 import online_plots as op
 
 log = logging.getLogger('iblrig')
 log.setLevel(logging.INFO)
 
 global sph
-sph = SessionParamHandler(task_settings, user_settings)
+sph = SessionParamHandler(ts, us)
 
 
 def bpod_loop_handler():

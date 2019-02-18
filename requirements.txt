@@ -1,6 +1,5 @@
 AnyQt==0.0.10
 asn1crypto==0.24.0
-certifi==2018.10.15
 cffi==1.11.5
 chardet==3.0.4
 ciso8601==2.1.1
@@ -10,13 +9,10 @@ cycler==0.10.0
 Cython==0.29.2
 dataclasses==0.6
 globus-sdk==1.7.0
--e git+https://github.com/int-brain-lab/ibllib.git@1dad9969426f9b2d8922aa2ad3fd5a0303481626#egg=ibllib&subdirectory=python
 idna==2.7
 kiwisolver==1.0.1
 logging-bootstrap==1.0.0
 matplotlib==3.0.2
-mkl-fft==1.0.6
-mkl-random==1.0.1
 numpy==1.15.4
 opencv-python==3.4.5.20
 pandas==0.23.4
