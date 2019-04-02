@@ -67,7 +67,6 @@ class TrialParamHandler(object):
         # Initialize parameters that may change every trial
         self.trial_num = 0
         self.stim_phase = 0.
-
         self.block_num = 0
         self.block_trial_num = 0
         self.block_len_factor = sph.BLOCK_LEN_FACTOR
