@@ -30,20 +30,20 @@ def update_probability_left(tph):
     elif tph.rew_probability_left == 0.8:
         return 0.4
 ###############################################################################
-############ This is they key section for reward selection ####################
+############ !!!!This is they key section for reward selection!!!!! ###########
 ###############################################################################
 
-def draw_reward(tph, position,rew_set, rew_probability_left, stim_pos):
-    if position < 0 & tph.rew_proability_left == 0.4: 
+def draw_reward(position,rew_set, rew_probability_left):
+    if position < 0 & rew_probability_left == 0.4: 
         return int(np.random.choice(
             rew_set, p=[rew_probability_left, 1 - rew_probability_left]))
-    elif position > 0 & tph.rew_proability_left == 0.4:
+    elif position > 0 & rew_probability_left == 0.4:
         return int(np.random.choice(
             rew_set, p=[rew_probability_left*2, 1 - rew_probability_left]))
-    if position < 0 & tph.rew_proability_left == 0.8: 
+    if position < 0 & rew_probability_left == 0.8: 
         return int(np.random.choice(
             rew_set, p=[rew_probability_left, 1 - rew_probability_left]))
-    elif position > 0 & tph.rew_proability_left == 0.8:
+    elif position > 0 & rew_probability_left == 0.8:
         return int(np.random.choice(
             rew_set, p=[rew_probability_left/2, 1 - rew_probability_left]))
         
