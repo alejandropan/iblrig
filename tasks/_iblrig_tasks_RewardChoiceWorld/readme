@@ -1,1 +1,5 @@
-@alejandro  20190402 reward block proabilities are hardcoded in task_setting AND in blocks_rew
+@alejandro  20190402 
+Reward block proabilities are hardcoded in task_setting AND in blocks_rew
+Block changes are not random, initialized on a random block and then transtions between the 2 possible optiopns
+There is currently no 50_50 block
+
