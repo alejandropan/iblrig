@@ -99,8 +99,7 @@ class TrialParamHandler(object):
         self.response_time_buffer = []
         # Rewarded
         self.rew_probability_left = blocks_rew.init_rew_probability_left(self) #### @alejandro
-        self.rewarded = blocks_rew.draw_reward(self.position #### @alejandro This determines whether an event is rewarded
-            self.rew_set, self.rew_probability_left)
+        self.rewarded = blocks_rew.draw_reward(self.position, self.rew_set, self.rew_probability_left) #### @alejandro This determines whether an event is rewarded 
         # Outcome related parmeters
         self.trial_correct_rewarded = None #### @alejandro
         self.trial_correct_unrewarded = None #### @alejandro
@@ -142,9 +141,9 @@ class TrialParamHandler(object):
         self.signed_contrast = self.contrast * np.sign(self.position)
         # Update state machine events
         self.event_error = self.threshold_events_dict[self.position]
-        self.event_reward = self.threshold_events_dict[-self.position] # need to check this 
-        self.rewarded = blocks_rew.draw_reward(self.position #### @alejandro This determines whether an event is rewarded
-            self.rew_set, self.rew_probability_left)
+        self.event_correct = self.threshold_events_dict[-self.position] # need to check this 
+        self.rewarded = blocks_rew.draw_reward(self.position, self.rew_set, self.rew_probability_left) #### @alejandro This determines whether an event is rewarded
+           
         # Reset outcome variables for next trial
         self.trial_correct_rewarded = None ####
         self.trial_correct_unrewarded = None ####
