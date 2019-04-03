@@ -34,18 +34,18 @@ def update_probability_left(tph):
 ###############################################################################
 
 def draw_reward(position,rew_set, rew_probability_left):
-    if position < 0 & rew_probability_left == 0.4: 
+    if position < 0 and rew_probability_left == 0.4: 
         return int(np.random.choice(
             rew_set, p=[rew_probability_left, 1 - rew_probability_left]))
-    elif position > 0 & rew_probability_left == 0.4:
+    elif position > 0 and rew_probability_left == 0.4:
         return int(np.random.choice(
-            rew_set, p=[rew_probability_left*2, 1 - rew_probability_left]))
-    if position < 0 & rew_probability_left == 0.8: 
+            rew_set, p=[rew_probability_left*2, 1 - rew_probability_left*2]))
+    if position < 0 and rew_probability_left == 0.8: 
         return int(np.random.choice(
             rew_set, p=[rew_probability_left, 1 - rew_probability_left]))
-    elif position > 0 & rew_probability_left == 0.8:
+    elif position > 0 and rew_probability_left == 0.8:
         return int(np.random.choice(
-            rew_set, p=[rew_probability_left/2, 1 - rew_probability_left]))
+            rew_set, p=[rew_probability_left/2, 1 - rew_probability_left/2]))
         
 ###############################################################################
 #I am macking unbiased position dependent on the proabbility of the rewarded 
@@ -54,9 +54,9 @@ def draw_reward(position,rew_set, rew_probability_left):
 ###############################################################################
 def init_rew_block_len(tph):
     return get_block_len(
-        factor=tph.block_len_factor, min_=tph.block_len_min,
-        max_=tph.block_len_max)
+        factor=tph.block_rew_len_factor, min_=tph.block_rew_len_min,
+        max_=tph.block_rew_len_max)
 
 
 def init_rew_probability_left(tph):
-    return np.random.choice(tph.block_probability_set)
+    return np.random.choice(tph.block_rew_probability_set)
