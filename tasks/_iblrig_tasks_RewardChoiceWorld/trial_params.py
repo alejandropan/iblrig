@@ -74,6 +74,14 @@ class TrialParamHandler(object):
         self.block_len_max = sph.BLOCK_LEN_MAX
         self.block_probability_set = sph.BLOCK_PROBABILITY_SET
         self.block_len = blocks.init_block_len(self)
+        #####@alejandro
+        self.block_rew_num = 0
+        self.block_rew_len_factor = sph.BLOCK_REW_LEN_FACTOR
+        self.block_rew_len_min = sph.BLOCK_REW_LEN_MIN
+        self.block_reW_len_max = sph.BLOCK_REW_LEN_MAX
+        self.block_rew_probability_set = sph.BLOCK_REW_PROBABILITY_SET
+        self.block_len = blocks_rew.init_block_len(self)
+        
         # Position
         self.stim_probability_left = blocks.init_probability_left(self)
         self.position = blocks.draw_position(
@@ -83,22 +91,22 @@ class TrialParamHandler(object):
         self.signed_contrast = self.contrast * np.sign(self.position)
         # RE event names
         self.event_error = self.threshold_events_dict[self.position]
-        self.event_reward = self.threshold_events_dict[-self.position]
+        self.event_correct = self.threshold_events_dict[-self.position] #need to change this
         self.movement_left = (
             self.threshold_events_dict[sph.QUIESCENCE_THRESHOLDS[0]])
         self.movement_right = (
             self.threshold_events_dict[sph.QUIESCENCE_THRESHOLDS[1]])
         self.response_time_buffer = []
         # Rewarded
-        self.rew_probability_left = blocks_rew.init_rew_block_len(self) #### @alejandro
-        self.rewarded = blocks_rew.draw_reward( #### @alejandro
-            self.rew_set, self.stim_probability_left)
+        self.rew_probability_left = blocks_rew.init_rew_probability_left(self) #### @alejandro
+        self.rewarded = blocks_rew.draw_reward(self.position #### @alejandro This determines whether an event is rewarded
+            self.rew_set, self.rew_probability_left)
         # Outcome related parmeters
-        self.trial_correct = None
-        self.trial_rewarded = None #### @alejandro
-        self.ntrials_correct = 0
+        self.trial_correct_rewarded = None #### @alejandro
+        self.trial_correct_unrewarded = None #### @alejandro
+        self.ntrials_correct_unrewarded = 0 #### @alejandro
         self.ntrials_correct_rewarded = 0 #### @alejandro
-        self.water_delivered = 0
+        self.water_delivered = 0 
 
     def check_stop_criterions(self):
         return misc.check_stop_criterions(
@@ -109,6 +117,7 @@ class TrialParamHandler(object):
         if self.trial_num == 0:
             self.trial_num += 1
             self.block_num += 1
+            self.block_rew_num += 1
             self.block_trial_num += 1
             # Send next trial info to Bonsai
             bonsai.send_current_trial_info(self)
@@ -133,9 +142,12 @@ class TrialParamHandler(object):
         self.signed_contrast = self.contrast * np.sign(self.position)
         # Update state machine events
         self.event_error = self.threshold_events_dict[self.position]
-        self.event_reward = self.threshold_events_dict[-self.position]
+        self.event_reward = self.threshold_events_dict[-self.position] # need to check this 
+        self.rewarded = blocks_rew.draw_reward(self.position #### @alejandro This determines whether an event is rewarded
+            self.rew_set, self.rew_probability_left)
         # Reset outcome variables for next trial
-        self.trial_correct = None
+        self.trial_correct_rewarded = None ####
+        self.trial_correct_unrewarded = None ####
         # Open the data file to append the next trial
         self.data_file = open(self.data_file_path, 'a')
         # Send next trial info to Bonsai
@@ -146,22 +158,26 @@ class TrialParamHandler(object):
         Check trial for state entries, first value of first tuple"""
         # Update elapsed_time
         self.elapsed_time = datetime.datetime.now() - self.init_datetime
-        correct = ~np.isnan(
-            behavior_data['States timestamps']['correct'][0][0])
+        correct_rewarded = ~np.isnan(
+            self.behavior_data['States timestamps']['correct']['rewarded'][0][0])
+        correct_unrewarded = ~np.isnan( #added vy alex
+            self.behavior_data['States timestamps']['correct']['unrewarded'][0][0]) ####
         error = ~np.isnan(
-            behavior_data['States timestamps']['error'][0][0])
+            self.behavior_data['States timestamps']['error'][0][0])
         no_go = ~np.isnan(
-            behavior_data['States timestamps']['no_go'][0][0])
-        assert correct or error or no_go
+            self.behavior_data['States timestamps']['no_go'][0][0])
+        assert correct_rewarded or correct_unrewarded or error or no_go ####
         # Add trial's response time to the buffer
         self.response_time_buffer.append(misc.get_trial_rt(behavior_data))
         # Update the trial_correct variable
-        self.trial_correct = bool(correct)
+        self.trial_correct_rewarded = bool(correct_rewarded) ####
+        self.trial_correct_unrewarded = bool(correct_unrewarded) ####
         # Increment the trial correct counter
-        self.ntrials_correct += self.trial_correct
+        self.ntrials_correct_unrewarded += self.trial_correct_unrewarded ####
+        self.ntrials_correct_rewarded += self.trial_correct_rewarded ####
         # Update the water delivered
-        if self.trial_correct:
-            self.water_delivered += self.reward_amount
+        if self.trial_correct_rewarded: ####
+            self.water_delivered += self.reward_amount ####
         # SAVE TRIAL DATA
         params = self.__dict__.copy()
         params.update({'behavior_data': behavior_data})
