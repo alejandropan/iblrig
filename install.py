@@ -10,12 +10,14 @@ import re
 import subprocess
 import sys
 from pathlib import Path
+import argparse
+
 
 # BEGIN CONSTANT DEFINITION
 IBLRIG_ROOT_PATH = Path.cwd()
 
 if sys.platform not in ['Windows', 'windows', 'win32']:
-    print('\nERROR: Unsupported OS\nInstallation aborted!')
+    print('\nERROR: Unsupported OS\nInstallation might not work!')
 # END CONSTANT DEFINITION
 
 
@@ -29,16 +31,27 @@ def get_iblenv():
     return iblenv
 
 
+def get_iblenv_python(rpip=False):
+    iblenv = get_iblenv()
+    pip = os.path.join(iblenv, 'Scripts', 'pip.exe')
+    python = os.path.join(iblenv, "python.exe")
+
+    return python if not rpip else pip
+
+
 def check_dependencies():
     # Check if Git and conda are installed
     print('\n\nINFO: Checking for dependencies:')
     print("N" * 79)
     try:
         subprocess.check_output(["git", "--version"])
+        os.system("git --version")
         print("git... OK")
-        os.system("conda update -y -n base -c defaults conda")
+        # os.system("conda update -y -n base -c defaults conda")
+        os.system("conda -V")
         print("conda... OK")
-        os.system("python -m pip install --upgrade pip")
+        # os.system("python -m pip install --upgrade pip")
+        os.system("pip -V")
         print("pip... OK")
     except Exception as err:
         print(err, "\nEither git, conda, or pip were not found.\n")
@@ -62,18 +75,22 @@ def install_environment():
         user_input = input()
         if user_input == 'y':
             os.system(remove_command)
-            install_environment()
+            return install_environment()
         elif user_input != 'n' and user_input != 'y':
             print("Please answer 'y' or 'n'")
-            install_environment()
+            return install_environment()
         elif user_input == 'n':
-            pass
+            return
     else:
         os.system(create_command)
         os.system("conda activate iblenv && python -m pip install --upgrade pip")  # noqa
-
     print("N" * 79)
     print("iblenv installed.")
+
+
+def install_deps():
+    os.system("conda activate iblenv && pip install -r requirements.txt")
+    os.system("conda install -y -n iblenv -c conda-forge ciso8601==2.1.1")
 
 
 def install_iblrig_requirements():
@@ -94,9 +111,11 @@ def install_iblrig_requirements():
     print("N" * 39, '(pip) Installing sounddevice')
     os.system("conda activate iblenv && pip install sounddevice")
     print("N" * 39, '(pip) Installing PyBpod')
-    os.system(
-        "conda activate iblenv && pip install --upgrade --force-reinstall pybpod")  # noqa
+    os.system("conda activate iblenv && pip install pybpod -U")
+    # os.system("conda activate iblenv && pip install --upgrade --force-reinstall pybpod")  # noqa
     # os.system("activate iblenv && pip install -U pybpod")
+    print("N" * 39, '(pip) Installing PyQtWebEngine')
+    os.system("conda activate iblenv && pip install PyQtWebEngine")
     print("N" * 39, '(pip) Installing Alyx plugin')
     os.system(
         "conda activate iblenv && pip install --upgrade pybpod-gui-plugin-alyx")  # noqa
@@ -118,14 +137,14 @@ def clone_ibllib():
         elif user_input == 'y':
             try:
                 os.system(f"rd /s /q {ibllib_path}")
-                clone_ibllib()
-            except:
+                return clone_ibllib()
+            except:  # noqa
                 print("\nCould not delete ibllib folder",
                       "\nPlease delete it manually and retry.")
-                clone_ibllib()
+                return clone_ibllib()
         elif user_input != 'n' and user_input != 'y':
             print("\n Please select either y of n")
-            clone_ibllib()
+            return clone_ibllib()
     else:
         subprocess.call(["git", "clone",
                          'https://github.com/int-brain-lab/ibllib.git'])
@@ -155,6 +174,7 @@ def configure_iblrig_params():
     if iblenv is None:
         msg = "Can't configure iblrig_params, iblenv not found"
         raise ValueError(msg)
+    python = get_iblenv_python()
     iblrig_params_path = IBLRIG_ROOT_PATH.parent / 'iblrig_params'
     if iblrig_params_path.exists():
         print(f"Found previous configuration in {str(iblrig_params_path)}",
@@ -163,19 +183,14 @@ def configure_iblrig_params():
         if user_input == 'n':
             return
         elif user_input == 'y':
-            here = os.getcwd()
-            os.chdir(IBLRIG_ROOT_PATH)
-            os.system(''.join(
-                ["conda activate iblenv && python setup_default_config.py ",
-                 iblrig_params_path]))
-            os.chdir(here)
+            subprocess.call([python, "setup_default_config.py",
+                             str(iblrig_params_path)])
         elif user_input != 'n' and user_input != 'y':
             print("\n Please select either y of n")
-            configure_iblrig_params()
+            return configure_iblrig_params()
     else:
-        os.system(''.join(
-            ["conda activate iblenv && python setup_default_config.py ",
-             iblrig_params_path]))
+        subprocess.call([python, "setup_default_config.py",
+                         str(iblrig_params_path)])
 
 
 def install_bonsai():
@@ -186,18 +201,28 @@ def install_bonsai():
                                      'Bonsai-2.3', 'Bonsai64.exe'))
     elif user_input != 'n' and user_input != 'y':
         print("Please answer 'y' or 'n'")
-        install_bonsai()
+        return install_bonsai()
     elif user_input == 'n':
-        pass
+        return
 
 
 if __name__ == '__main__':
+    ALLOWED_ACTIONS = ['new']
+    parser = argparse.ArgumentParser(description='Install iblrig')
+    parser.add_argument('--new', required=False, default=False,
+                        action='store_true', help='Use new install procedure')
+    args = parser.parse_args()
+
     try:
         check_dependencies()
         install_environment()
-        install_iblrig_requirements()
-        yn = clone_ibllib()
-        install_ibllib(user_input=yn)
+        if args.new:
+            install_deps()
+        elif not args.new:
+            install_iblrig_requirements()
+            yn = clone_ibllib()
+            install_ibllib(user_input=yn)
+
         configure_iblrig_params()
         print("\nIts time to install Bonsai:")
         install_bonsai()
