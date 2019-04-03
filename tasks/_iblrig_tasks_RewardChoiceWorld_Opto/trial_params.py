@@ -66,7 +66,7 @@ class TrialParamHandler(object):
         self.opto_freq = sph.OPTO_FREQ
         self.opto_pulse_length = sph.OPTO_PULSE_LENGTH
         self.opto_pulse_freq = sph.OPTO_PULSE_FREQ
-        self.opto_trial = optobpod.opto_switch(self.opto_on, self.opto_freq)
+        self.opto_trial = optobpod.opto_switch(self.opto_on, self.opto_freq) #Determines whether this trial is an opto trial
 	#######################################################################
 	#######################################################################	       
 	# Reward amount
@@ -156,7 +156,6 @@ class TrialParamHandler(object):
         self.event_error = self.threshold_events_dict[self.position]
         self.event_correct = self.threshold_events_dict[-self.position] # need to check this 
         self.rewarded = blocks_rew.draw_reward(self.position, self.rew_set, self.rew_probability_left) #### @alejandro This determines whether an event is rewarded
-           
         # Reset outcome variables for next trial
         self.trial_correct_rewarded = None ####
         self.trial_correct_unrewarded = None ####
@@ -164,6 +163,8 @@ class TrialParamHandler(object):
         self.data_file = open(self.data_file_path, 'a')
         # Send next trial info to Bonsai
         bonsai.send_current_trial_info(self)
+        #Update opto_variables
+        self.opto_trial = optobpod.opto_switch(self.opto_on, self.opto_freq)
 
     def trial_completed(self, behavior_data):
         """Update outcome variables using bpod.session.current_trial

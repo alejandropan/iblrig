@@ -137,7 +137,7 @@ for i in range(sph.NTRIALS):  # Main loop
         state_change_conditions={'Tup': 'no_go',
                                  tph.event_error: 'error',
                                  tph.event_correct: 'reward' if tph.rewarded==1 else 'error'}, #need to check this
-        output_actions=[('Serial1', re_close_loop), tph.out_tone])
+        output_actions=[('Serial1', re_close_loop), tph.out_tone, ('BNC1' = tph.opto_trial)])
 
     sma.add_state(
         state_name='no_go',
