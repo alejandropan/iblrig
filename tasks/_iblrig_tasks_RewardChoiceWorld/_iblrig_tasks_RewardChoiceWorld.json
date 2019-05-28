@@ -1,0 +1,11 @@
+{
+    "__CREATED-ON__": "2019-04-23 02:17:25.226487",
+    "__DEF-TEXT__": "This file contains information about a PyBpod protocol.",
+    "__DEF-URL__": "http://pybpod.readthedocs.org",
+    "__SOFTWARE__": "PyBpod GUI API v1.2.1",
+    "__UPDATED-ON__": "2019-04-23 02:17:25.226487",
+    "__UUID4__": "851873ce-6caf-44f8-be64-191391d4bc6c",
+    "commands": [],
+    "name": "_iblrig_tasks_RewardChoiceWorld",
+    "trigger-softcodes": false
+}

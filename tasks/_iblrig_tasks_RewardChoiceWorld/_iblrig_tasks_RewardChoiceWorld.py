@@ -79,8 +79,8 @@ bpod.load_serial_message(rotary_encoder, re_close_loop, [ord('#'), 3])
 global tph
 tph = TrialParamHandler(sph)
 
-f, axes = op.make_fig(sph)
-plt.pause(1)
+f, axes = op.make_fig(sph) #@alex ask nicco about this
+plt.pause(1) #@alex ask nicco about this
 
 for i in range(sph.NTRIALS):  # Main loop
     tph.next_trial()
@@ -136,7 +136,7 @@ for i in range(sph.NTRIALS):  # Main loop
         state_timer=tph.response_window,
         state_change_conditions={'Tup': 'no_go',
                                  tph.event_error: 'error',
-                                 tph.event_correct: 'reward' if tph.rewarded==1 else 'error'}, #need to check this
+                                 tph.event_correct: 'correct_unrewarded' if tph.rewarded!=1 else 'correct_rewarded'}, #need to check this
         output_actions=[('Serial1', re_close_loop), tph.out_tone])
 
     sma.add_state(
@@ -152,14 +152,20 @@ for i in range(sph.NTRIALS):  # Main loop
         output_actions=[tph.out_noise])
 
     sma.add_state(
-        state_name='reward',
+        state_name='correct_unrewarded',
+        state_timer=tph.iti_error,
+        state_change_conditions={'Tup': 'correct'},#
+        output_actions=[tph.out_noise])
+
+    sma.add_state(
+        state_name='correct_rewarded',
         state_timer=tph.reward_valve_time,
         state_change_conditions={'Tup': 'correct'},
         output_actions=[('Valve1', 255)])
 
     sma.add_state(
         state_name='correct',
-        state_timer=tph.iti_correct,
+        state_timer=tph.iti_correct if tph.rewarded == 1 else tph.iti_error, #Currently ITI for correct unrewarded same as error
         state_change_conditions={'Tup': 'exit'},
         output_actions=[])
 

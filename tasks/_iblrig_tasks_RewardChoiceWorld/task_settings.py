@@ -19,7 +19,7 @@ NTRIALS = 2000  # Number of trials for the current session
 USE_AUTOMATIC_STOPPING_CRITERIONS = True  # Weather to check for the Automatic stopping criterions or not  # noqa
 USE_VISUAL_STIMULUS = True  # Run the visual stim in bonsai
 BONSAI_EDITOR = False  # Whether to open the visual stim Bonsai editor or not
-REPEAT_ON_ERROR = True
+REPEAT_ON_ERROR = False
 # STATE TIMERS
 QUIESCENCE_THRESHOLDS = [-2, 2]  # degree
 QUIESCENT_PERIOD = 0.2  # + x, where x~exp(0.35), t ∈ 0.2 <= R <= 0.5
@@ -35,10 +35,11 @@ STIM_GAIN = 4.  # (azimuth_degree/mm) Gain of the RE to stimulus movement
 SYNC_SQUARE_X = 0.95
 SYNC_SQUARE_Y = 0.17
 # BLOCKS
-BLOCK_PROBABILITY_SET = [0.2, 0.8]
-BLOCK_LEN_FACTOR = 60
-BLOCK_LEN_MIN = 20
-BLOCK_LEN_MAX = 100
+BLOCK_INIT_5050 = True
+BLOCK_PROBABILITY_SET = [0.5, 0.5]
+BLOCK_LEN_FACTOR = 2000
+BLOCK_LEN_MIN = 3000
+BLOCK_LEN_MAX = 5000
 # REW BLOCKS
 BLOCK_REW_PROBABILITY_SET = [0.4, 0.8]
 BLOCK_REW_LEN_FACTOR = 60

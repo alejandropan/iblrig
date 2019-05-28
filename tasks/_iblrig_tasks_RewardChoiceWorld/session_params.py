@@ -110,8 +110,8 @@ class SessionParamHandler(object):
         # =====================================================================
         if not self.DEBUG:
             iotasks.save_session_settings(self)
-            iotasks.copy_task_code(self)
-            iotasks.save_task_code(self)
+            #iotasks.copy_task_code(self)
+            #iotasks.save_task_code(self)
             self.bpod_lights(0)
 
         self.display_logs()
@@ -220,12 +220,12 @@ if __name__ == '__main__':
     dt = [x if int(x) >= 10 else '0' + x for x in dt]
     dt.insert(3, '-')
     _user_settings.PYBPOD_SESSION = ''.join(dt)
-    _user_settings.PYBPOD_SETUP = 'biasedChoiceWorld'
-    _user_settings.PYBPOD_PROTOCOL = '_iblrig_tasks_biasedChoiceWorld'
+    _user_settings.PYBPOD_SETUP = 'RewardChoiceWorld'
+    _user_settings.PYBPOD_PROTOCOL = '_iblrig_tasks_RewardChoiceWorld'
     if platform == 'linux':
-        r = "/home/nico/Projects/IBL/IBL-github/iblrig"
+        r = "/home/nico/Projects/IBL/github/iblrig"
         _task_settings.IBLRIG_FOLDER = r
-        d = ("/home/nico/Projects/IBL/IBL-github/iblrig/scratch/" +
+        d = ("/home/nico/Projects/IBL/github/iblrig/scratch/" +
              "test_iblrig_data")
         _task_settings.IBLRIG_DATA_FOLDER = d
         _task_settings.AUTOMATIC_CALIBRATION = False
