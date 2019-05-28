@@ -1,9 +1,8 @@
-#!/usr/bin/python3
+#!/usr/bin/env python
+#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 # @Author: Niccolò Bonacchi
 # @Date:   2018-06-08 11:04:05
-# @Last Modified by:   Niccolò Bonacchi
-# @Last Modified time: 2018-07-12 13:08:10
 import json
 import os
 import re
@@ -90,7 +89,6 @@ def install_environment():
 
 def install_deps():
     os.system("conda activate iblenv && pip install -r requirements.txt")
-    os.system("conda install -y -n iblenv -c conda-forge ciso8601==2.1.1")
 
 
 def install_iblrig_requirements():
@@ -102,8 +100,6 @@ def install_iblrig_requirements():
     os.system("conda install -y -n iblenv scipy")
     print("N" * 39, 'Installing requests')
     os.system("conda install -y -n iblenv requests")
-    print("N" * 39, 'Installing ciso8601')
-    os.system("conda install -y -n iblenv -c conda-forge ciso8601")
 
     print("N" * 39, '(pip) Installing python-osc')
     os.system("conda activate iblenv && pip install python-osc")
@@ -116,9 +112,12 @@ def install_iblrig_requirements():
     # os.system("activate iblenv && pip install -U pybpod")
     print("N" * 39, '(pip) Installing PyQtWebEngine')
     os.system("conda activate iblenv && pip install PyQtWebEngine")
-    print("N" * 39, '(pip) Installing Alyx plugin')
+    print("N" * 39, '(pip) Installing PyBpod Alyx plugin')
     os.system(
         "conda activate iblenv && pip install --upgrade pybpod-gui-plugin-alyx")  # noqa
+    print("N" * 39, '(pip) Installing PyBpod Soundcard plugin')
+    os.system(
+        "conda activate iblenv && pip install --upgrade pybpod-gui-plugin-soundcard")  # noqa
     print("N" * 79)
     print("IBLrig requirements installed.")
 
