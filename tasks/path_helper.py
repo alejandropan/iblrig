@@ -138,7 +138,7 @@ class SessionPathCreator(object):
         elif 'ephys' in self._PROTOCOL:
             return 'EphysGabor2D'
         else:
-            return ''
+            return 'BiasedGabor2D' #@alejandro implicit to show it in reinforcement task
 
     def _init_com(self) -> dict:
         logger.debug("Initializing COM ports")
